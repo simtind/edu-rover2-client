@@ -5,7 +5,7 @@
   "main": "./src/main.js",
   "scripts": {
     "start": "electron .",
-		"postinstall": "electron-builder install-app-deps",
+		"postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
