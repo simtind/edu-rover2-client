@@ -3,7 +3,6 @@ const { app, BrowserWindow } = require('electron')
 const ipc = require('electron').ipcMain;
 const path = require('path');
 const ping = require('ping');
-const WebSocket = require('ws');
 const arp = require('node-arp');
 const os = require("os"); 
 const autoUpdater = require("electron-updater");
