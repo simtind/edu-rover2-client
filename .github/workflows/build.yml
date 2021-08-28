@@ -41,17 +41,17 @@ jobs:
       - name: Upload Linux Artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: my-app-linux
+          name: edu-rover2-client-linux
           path: dist-linux
 
       - name: Upload Mac Artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: my-app-mac
+          name: edu-rover2-client-mac
           path: dist-mac
 
       - name: Upload Win Artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: my-app-win
+          name: edu-rover2-client-win
           path: dist-win
