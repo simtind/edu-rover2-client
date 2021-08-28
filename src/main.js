@@ -4,8 +4,8 @@ const ipc = require('electron').ipcMain;
 const path = require('path');
 const ping = require('ping');
 const arp = require('node-arp');
-const os = require("os"); 
-const autoUpdater = require("electron-updater");
+const os = require("os");
+const {autoUpdater} = require("electron-updater");
 
 function createWindow() {
     const source_dir = path.join(__dirname, "main_window");
