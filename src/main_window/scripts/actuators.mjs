@@ -1,11 +1,15 @@
 import { io_send } from './ioclient.mjs';
-var actuators = {armed:false, lights:0.0, sensor_interval:500, sensitivity:1023, vertical:0.0, port:0.0, starboard:0.0}
+var actuators = {armed:false, lights:0.0, interval:100, sensitivity:255, vertical:0.0, port:0.0, starboard:0.0}
 
 var interval = null;
 
 function update_interval()
 {
-    interval = setInterval( () => { io_send(actuators); }, actuators["sensor_interval"]);
+    if (interval != null)
+    {
+        clearInterval(interval);
+    }
+    interval = setInterval( () => { actuators_send(); }, actuators["interval"]);
 }
 
 export function actuators_send()
@@ -24,7 +28,7 @@ export function actuators_set(key, value)
 {
     actuators[key] = value;
 
-    if (key == "sensor_interval")
+    if (key == "interval")
     {
         update_interval();
     }

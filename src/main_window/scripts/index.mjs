@@ -25,13 +25,12 @@ export function armed_toggle()
 
 function get_slider(id)
 {
-    var intensity_elm = document.getElementById(id); 
-    return Math.max(intensity_elm.value / intensity_elm.max, 0.1);
+    return document.getElementById(id).value; 
 }
 
 function light_update() 
 {
-    const intensity =  get_slider("slider_headlight_intensity");
+    const intensity =  Number(document.getElementById("slider_headlight_intensity").value);
 
     if (actuators_get('lights') > 0.0)
     {
@@ -42,7 +41,7 @@ function light_update()
 
 export function light_toggle()
 {
-    var intensity =  get_slider("slider_headlight_intensity");
+    var intensity =  Number(document.getElementById("slider_headlight_intensity").value);
 
     intensity = actuators_get('lights') > 0.0 ? 0.0 : intensity;
     
@@ -51,9 +50,9 @@ export function light_toggle()
 }
 
 function roll_toggle(){
-    set_button_state("button_toggle_roll", roll_ui);
-    document.getElementById("rollOverlay").style.visibility = roll_ui ? "visible" : "hidden";
     roll_ui = !roll_ui;
+    document.getElementById("rollOverlay").style.visibility = roll_ui ? "visible" : "hidden";
+    set_button_state("button_toggle_roll", roll_ui);
 }
 
 function refresh_ui(sensors){
@@ -68,7 +67,14 @@ function refresh_ui(sensors){
             if (isNaN(val)){
                 element.innerHTML = val;
             } else{
-                element.innerHTML = val.toFixed(1);
+                if (key.endsWith("_current"))
+                {
+                    element.innerHTML = (val * 1000).toFixed(1);
+                }
+                else
+                {
+                    element.innerHTML = val.toFixed(1);
+                }
             }
         }
     }
@@ -100,17 +106,17 @@ document.getElementById("button_toggle_roll").onclick =             roll_toggle;
 document.getElementById("button_enter_cinema").onclick =            () => set_button_state("button_enter_cinema", video_enter_cinema());
 document.getElementById("button_stop_rov").onclick =                () => io_send("stop");
 document.getElementById("button_toggle_light").onclick =            light_toggle;
-document.getElementById("slider_sensor_interval").onchange =        () => actuators_set("sensor_interval", document.getElementById("slider_sensor_interval").value);
+document.getElementById("slider_sensor_interval").onchange =        () => actuators_set("interval", Number(document.getElementById("slider_sensor_interval").value));
 document.getElementById("slider_headlight_intensity").onchange =    light_update;
-document.getElementById("slider_actuator_sensitivity").onchange =   () => actuators_set("sensitivity", get_slider("slider_actuator_sensitivity"));
+document.getElementById("slider_actuator_sensitivity").onchange =   () => actuators_set("sensitivity", Number(document.getElementById("slider_actuator_sensitivity").value));
 window.addEventListener("resize",                                   video_update_size);
 
 function start(event, address)
 {
     console.log("Got address " + address);
-    video_init(`ws://${address}:8081`);
+    video_init(`ws://${address}`);
     io_open(
-        `ws://${address}:8082`, 
+        `ws://${address}`, 
         (event) => { refresh_ui(JSON.parse(event.data)); },
         () =>      { }
     );

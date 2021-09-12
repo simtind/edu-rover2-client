@@ -104,7 +104,8 @@ export function video_init(address)
     { 
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
     };
-    
+
+    address += ":8081";
     var client = new WebSocket(address);
     console.log("Received camera server url", address)
     client.addEventListener(

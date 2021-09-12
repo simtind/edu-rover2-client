@@ -16,16 +16,16 @@ export function io_close(){
 
 export function io_open(address, message_handler, close_handler) {
 
-    console.log("Starting I/O server");
+    console.log("Starting I/O server client");
     
     // Create WebSocket connection.
-    client = new WebSocket(address);
+    client = new WebSocket(address + ":8082");
     
     client.addEventListener(
         'open', 
         ()  =>
         {
-            console.log("I/O Server Connection made");
+            console.log("I/O server Connection made");
             client.send("Start");
         }
     );            
