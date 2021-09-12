@@ -139,7 +139,7 @@ function start_main_window(splash_window, address) {
 }
 
 function createSplash() {
-    const source_dir = path.join(__dirname, "splash_screen");
+    const source_dir = path.join(__dirname, "start_screen");
 
     // Create the browser window.
     var window = new BrowserWindow({
