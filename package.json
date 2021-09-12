@@ -5,7 +5,7 @@
   "main": "./src/main.js",
   "scripts": {
     "start": "electron .",
-		"postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -18,25 +18,26 @@
     "underwater",
     "rov"
   ],
-	"author": {
-		"name": "Simen August Tinderholt",
-		"email": "simtind@gmail.com",
-		"url": "https://github.com/simtind"
-	},
+  "author": {
+    "name": "Simen August Tinderholt",
+    "email": "simtind@gmail.com",
+    "url": "https://github.com/simtind"
+  },
   "license": "GPL-3.0",
-  
   "dependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "ping": "^0.4.1",
+    "arduino-cli": "^0.37.0",
+    "child_process": "^1.0.2",
+    "electron-updater": "^4.3.9",
+    "extract-zip": "^2.0.1",
     "node-arp": "^1.0.6",
-		"electron-updater": "^4.3.9"
+    "ping": "^0.4.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "electron": "^13.1.5",
-		"electron-builder": "^22.11.7"
+    "electron-builder": "^22.11.7"
   },
-
   "bugs": {
     "url": "https://github.com/simtind/edu-rover2-client/issues"
   },
