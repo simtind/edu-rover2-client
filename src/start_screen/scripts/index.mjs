@@ -2,9 +2,12 @@ var selected_row = null;
 const edurov_servers = {};
 
 
-function start_app()
+function start_app(address=null)
 {
-    const address = document.getElementById("input_url").value;
+    if (address == null)
+    {
+        address = document.getElementById("input_url").value;
+    }
     window.splash.start(address);
 }
 
@@ -50,6 +53,7 @@ function on_edurov_search_result(event, result)
     cell_interface.innerHTML = result["interface"];
     cell_message.innerHTML = result["message"]; 
     cell_button.innerHTML = `<button type="button" class="btn btn-outline-primary btn-sm btn-block" title="Connect to server at ${result["ip"]}.">Connect</button>`
+    cell_button.onclick = () => start_app(result["ip"]);
 }
 
 function start_search()
