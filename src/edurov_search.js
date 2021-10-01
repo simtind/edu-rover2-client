@@ -40,29 +40,37 @@ function start(window)
     hosts.forEach(
         (host) => 
         {
-            console.log("Start listening for EDUROV servers on interface with IP: " + host);
-            client = dgram.createSocket('udp4');
-        
-            client.on('listening', function () {
-                var address = client.address();
-                console.log('UDP Client listening on ' + address.address + ":" + address.port);
-                client.setBroadcast(true)
-                client.setMulticastTTL(128); 
-                client.addMembership(CHANNEL, host["ip"]);
-            });
-        
-            client.on('message', function (message, remote) {   
-                
-                window.webContents.send("edurov_search_result",
-                    {
-                        ip: remote.address,
-                        message: message.toString(),
-                        interface: host["interface"]
-                    }
-                );
-            });
-        
-            client.bind(PORT, host["ip"]);
+            try
+            {
+                console.log("Start listening for EDUROV servers on interface with IP: " + host);
+                client = dgram.createSocket('udp4');
+
+                client.on('listening', function () {
+                    var address = client.address();
+                    console.log('UDP Client listening on ' + address.address + ":" + address.port);
+                    client.setBroadcast(true)
+                    client.setMulticastTTL(128); 
+                    client.addMembership(CHANNEL, host["ip"]);
+                });
+
+                client.on('message', function (message, remote) {   
+
+                    window.webContents.send("edurov_search_result",
+                        {
+                            ip: remote.address,
+                            message: message.toString(),
+                            interface: host["interface"]
+                        }
+                    );
+                });
+
+                client.bind(PORT, host["ip"]);
+            }
+            catch (error) 
+            {
+                console.log("Could not start listening on host, got error.");
+                console.log(error);
+            }
         }
     );
 }
