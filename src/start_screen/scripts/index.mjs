@@ -64,7 +64,7 @@ function start_search()
     window.splash.edurov_search.start();
 }
 
-document.getElementById("button_start_app").onclick = start_app;
+document.getElementById("button_start_app").onclick = () => start_app(document.getElementById("input_url").value);
 window.splash.edurov_search.on_result(on_edurov_search_result);
 
 start_search();
