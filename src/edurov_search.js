@@ -66,6 +66,11 @@ function start(window)
                 client.on('message', 
                     function (message, remote) 
                     {
+                        if (message.toString() == "edurov_waiting")
+                        {
+                            // Skip submitting "waiting" message
+                            return;
+                        }
                         window.webContents.send("edurov_search_result",
                             {
                                 ip: remote.address,
