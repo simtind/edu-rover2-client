@@ -40,29 +40,50 @@ function start(window)
     hosts.forEach(
         (host) => 
         {
-            console.log("Start listening for EDUROV servers on interface with IP: " + host);
-            client = dgram.createSocket('udp4');
-        
-            client.on('listening', function () {
-                var address = client.address();
-                console.log('UDP Client listening on ' + address.address + ":" + address.port);
-                client.setBroadcast(true)
-                client.setMulticastTTL(128); 
-                client.addMembership(CHANNEL, host["ip"]);
-            });
-        
-            client.on('message', function (message, remote) {   
-                
-                window.webContents.send("edurov_search_result",
-                    {
-                        ip: remote.address,
-                        message: message.toString(),
-                        interface: host["interface"]
+            try
+            {
+                client = dgram.createSocket('udp4');
+            
+                client.on('listening', 
+                    function () {
+                        try
+                        {
+                            var address = client.address();
+                            console.log('UDP Client listening on ' + address.address + ":" + address.port);
+                            client.setBroadcast(true)
+                            client.setMulticastTTL(128); 
+                            client.addMembership(CHANNEL, host["ip"]);
+                        }
+                        catch (error)
+                        {
+                            console.log("Failed to start listener on IP " + host["ip"])
+                            console.log(error);
+                            // client.close();
+                        }
                     }
                 );
-            });
-        
-            client.bind(PORT, host["ip"]);
+            
+                client.on('message', 
+                    function (message, remote) 
+                    {
+                        window.webContents.send("edurov_search_result",
+                            {
+                                ip: remote.address,
+                                message: message.toString(),
+                                interface: host["interface"]
+                            }
+                        );
+                    }
+                );
+            
+                client.bind(PORT, host["ip"]);
+                console.log("Listening for EDUROV servers on interface with IP: " + host["ip"]);
+            }
+            catch (error)
+            {
+                console.log("Failed to start listener on IP " + host["ip"])
+                console.log(error);
+            }
         }
     );
 }
