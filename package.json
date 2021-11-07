@@ -1,6 +1,6 @@
 {
   "name": "edurov-control",
-  "version": "0.8.0",
+  "version": "1.2.0",
   "description": "An application to control an EduROV educational underwater ROV",
   "main": "./src/main.js",
   "scripts": {
