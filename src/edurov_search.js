@@ -48,8 +48,6 @@ function start(window)
                     function () {
                         try
                         {
-                            var address = client.address();
-                            console.log('UDP Client listening on ' + address.address + ":" + address.port);
                             client.setBroadcast(true)
                             client.setMulticastTTL(128); 
                             client.addMembership(CHANNEL, host["ip"]);
