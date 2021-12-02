@@ -44,13 +44,11 @@ function on_edurov_search_result(event, result)
 
     // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
     var cell_address = row.insertCell(0);
-    var cell_interface = row.insertCell(1);
-    var cell_message = row.insertCell(2);
-    var cell_button = row.insertCell(3);
+    var cell_message = row.insertCell(1);
+    var cell_button = row.insertCell(2);
 
     // Add some text to the new cells:
     cell_address.innerHTML = result["ip"];
-    cell_interface.innerHTML = result["interface"];
     cell_message.innerHTML = result["message"]; 
     cell_button.innerHTML = `<button type="button" class="btn btn-outline-primary btn-sm btn-block" title="Connect to server at ${result["ip"]}.">Connect</button>`
     cell_button.onclick = () => start_app(result["ip"]);

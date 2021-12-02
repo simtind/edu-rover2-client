@@ -1,21 +1,21 @@
 const dgram = require('dgram');
 const os = require("os");
 
-var client = null;
+var socket = null;
 
 function stop()
 {
-    if (client == null)
+    if (socket == null)
     {
         return;
     }
 
-    client.close();    
+    socket.close();    
 }
 
 function start(window)
 {
-    if (client != null)
+    if (socket != null)
     {
         stop();
     }
@@ -37,55 +37,53 @@ function start(window)
 
     const PORT = 8083;
     const CHANNEL = "224.0.0.50";
-    hosts.forEach(
-        (host) => 
+    socket = dgram.createSocket('udp4');
+
+    socket.on("error", (error) => 
         {
+            console.log(`Socket error: ${error.stack}`);
+            socket.close();
+        }
+    );
+
+    socket.on('message', 
+        function (message, remote) 
+        {
+            if (message.toString() == "edurov_waiting")
+            {
+                // Skip submitting "waiting" message
+                return;
+            }
+            
+            window.webContents.send("edurov_search_result",
+                {
+                    ip: remote.address,
+                    message: message.toString(),
+                }
+            );
+        }
+    );
+
+    socket.bind(
+        PORT,
+        undefined, 
+        function () {
             try
             {
-                client = dgram.createSocket('udp4');
-            
-                client.on('listening', 
-                    function () {
-                        try
-                        {
-                            client.setBroadcast(true)
-                            client.setMulticastTTL(128); 
-                            client.addMembership(CHANNEL, host["ip"]);
-                        }
-                        catch (error)
-                        {
-                            console.log("Failed to start listener on IP " + host["ip"])
-                            console.log(error);
-                            // client.close();
-                        }
-                    }
-                );
-            
-                client.on('message', 
-                    function (message, remote) 
+                socket.setBroadcast(true);
+                socket.setMulticastTTL(128);
+                hosts.forEach((host) => 
                     {
-                        if (message.toString() == "edurov_waiting")
-                        {
-                            // Skip submitting "waiting" message
-                            return;
-                        }
-                        window.webContents.send("edurov_search_result",
-                            {
-                                ip: remote.address,
-                                message: message.toString(),
-                                interface: host["interface"]
-                            }
-                        );
+                        socket.addMembership(CHANNEL, host["ip"]);
+                        console.log("Listening for EDUROV servers on interface with name: " + host["interface"]);
                     }
-                );
-            
-                client.bind(PORT, host["ip"]);
-                console.log("Listening for EDUROV servers on interface with IP: " + host["ip"]);
+                )
             }
             catch (error)
             {
-                console.log("Failed to start listener on IP " + host["ip"])
+                console.log("Failed to start listener")
                 console.log(error);
+                socket.close();
             }
         }
     );
